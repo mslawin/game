@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShapeComparator {
 
-    public int compare(Shape shape1, Shape shape2) {
+    int compare(Shape shape1, Shape shape2) {
         if (shape1 == shape2) {
             return 0;
         }
