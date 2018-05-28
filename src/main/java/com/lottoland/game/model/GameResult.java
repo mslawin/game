@@ -10,7 +10,7 @@ import lombok.Data;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameResult {
 
-    private final Shape player1Shape;
-    private final Shape player2Shape;
-    private final int result;
+    private final Shape randomPlayerShape;
+    private final Shape rockPlayerShape;
+    private final Winner winner;
 }
