@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
@@ -36,7 +37,7 @@ public class GameControllerSessionTest {
         MockHttpSession session = new MockHttpSession();
 
         // when
-        mockMvc.perform(post("/game").session(session));
+        mockMvc.perform(post("/user").session(session));
 
         // then
         GameSession gameSession = (GameSession) session.getAttribute("scopedTarget.gameSession");
@@ -53,7 +54,7 @@ public class GameControllerSessionTest {
         session.setAttribute("scopedTarget.gameSession", gameSession);
 
         // when
-        mockMvc.perform(post("/game/reset").session(session));
+        mockMvc.perform(delete("/user").session(session));
 
         // then
         gameSession = (GameSession) session.getAttribute("scopedTarget.gameSession");

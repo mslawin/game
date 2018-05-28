@@ -6,13 +6,16 @@ import com.lottoland.game.service.GameService;
 import com.lottoland.game.service.GameSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController("/game")
+@RestController
+@RequestMapping("/user")
 public class GameController {
 
     private final GameService gameService;
@@ -23,7 +26,7 @@ public class GameController {
         this.gameSession = gameSession;
     }
 
-    @PostMapping("/play")
+    @PostMapping
     public ResponseEntity<GameResult> playGame() {
         GameResult gameResult = gameService.play();
         gameSession.addResult(gameResult);
@@ -42,7 +45,7 @@ public class GameController {
         return ResponseEntity.ok(AllGamesResults.builder().gameResults(gameResults).randomPlayerWins(randomPlayerWins).rockPlayerWins(rockPlayerWins).draws(draws).build());
     }
 
-    @PostMapping("/reset")
+    @DeleteMapping
     public void reset() {
         gameSession.getGameResults().clear();
     }
