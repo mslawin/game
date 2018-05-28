@@ -1,5 +1,6 @@
 package com.lottoland.game.controller;
 
+import com.lottoland.game.model.GameResult;
 import com.lottoland.game.service.GameSession;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,10 +36,27 @@ public class GameControllerSessionTest {
         MockHttpSession session = new MockHttpSession();
 
         // when
-        mockMvc.perform(post("/play").session(session));
+        mockMvc.perform(post("/game").session(session));
 
         // then
         GameSession gameSession = (GameSession) session.getAttribute("scopedTarget.gameSession");
         assertThat(gameSession.getGameResults()).hasSize(1);
+    }
+
+    @Test
+    public void shouldResetGames() throws Exception {
+        // given
+        GameSession gameSession = new GameSession();
+        gameSession.addResult(GameResult.builder().build());
+        gameSession.addResult(GameResult.builder().build());
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("scopedTarget.gameSession", gameSession);
+
+        // when
+        mockMvc.perform(post("/game/reset").session(session));
+
+        // then
+        gameSession = (GameSession) session.getAttribute("scopedTarget.gameSession");
+        assertThat(gameSession.getGameResults()).hasSize(0);
     }
 }

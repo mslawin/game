@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
+@RestController("/game")
 public class GameController {
 
     private final GameService gameService;
@@ -40,5 +40,10 @@ public class GameController {
         long rockPlayerWins = gameService.getRockPlayerWins(gameResults);
         long draws = gameResults.size() - randomPlayerWins - rockPlayerWins;
         return ResponseEntity.ok(AllGamesResults.builder().gameResults(gameResults).randomPlayerWins(randomPlayerWins).rockPlayerWins(rockPlayerWins).draws(draws).build());
+    }
+
+    @PostMapping("/reset")
+    public void reset() {
+        gameSession.getGameResults().clear();
     }
 }

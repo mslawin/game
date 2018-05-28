@@ -57,7 +57,7 @@ public class GameControllerTest {
         when(gameSession.getGameResults()).thenReturn(Collections.emptyList());
 
         // when
-        ResponseEntity<AllGamesResults> responseEntity = gameController.allGamesResults();
+        ResponseEntity<AllGamesResults> responseEntity = gameController.allGamesResultsPerUser();
 
         // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
@@ -73,7 +73,7 @@ public class GameControllerTest {
         when(gameService.getRockPlayerWins(anyList())).thenCallRealMethod();
 
         // when
-        ResponseEntity<AllGamesResults> responseEntity = gameController.allGamesResults();
+        ResponseEntity<AllGamesResults> responseEntity = gameController.allGamesResultsPerUser();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         AllGamesResults body = responseEntity.getBody();
         assertThat(body.getRockPlayerWins()).isEqualTo(0);
