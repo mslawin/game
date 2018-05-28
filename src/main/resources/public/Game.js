@@ -5,7 +5,7 @@ var GameModel = {
     draws: ko.observable(0),
 
     play : function () {
-        $.post("/user", function (data) {
+        $.post("/game/user", function (data) {
             var tab = GameModel.gamesResults() || [];
             tab.push(data);
             GameModel.gamesResults(tab);
@@ -21,7 +21,7 @@ var GameModel = {
 
     reset : function () {
         $.ajax({
-            url: "/user",
+            url: "/game/user",
             type: "DELETE",
             success: function () {
                 GameModel.gamesResults([]);
@@ -34,7 +34,7 @@ var GameModel = {
 };
 
 function getGamesResults() {
-    $.getJSON("/user", function (data) {
+    $.getJSON("/game/user", function (data) {
         if (data !== undefined) {
             GameModel.gamesResults(data.gameResults);
             GameModel.randomPlayerWins(data.randomPlayerWins);

@@ -2,6 +2,7 @@ package com.lottoland.game.controller;
 
 import com.lottoland.game.model.AllGamesResults;
 import com.lottoland.game.model.GameResult;
+import com.lottoland.game.service.AllGamesResultsService;
 import com.lottoland.game.service.GameService;
 import com.lottoland.game.service.GameSession;
 import org.springframework.http.ResponseEntity;
@@ -15,27 +16,43 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/game")
 public class GameController {
 
     private final GameService gameService;
     private final GameSession gameSession;
+    private final AllGamesResultsService allGamesResultsService;
 
-    public GameController(GameService gameService, GameSession gameSession) {
+    public GameController(GameService gameService, GameSession gameSession, AllGamesResultsService allGamesResultsService) {
         this.gameService = gameService;
         this.gameSession = gameSession;
+        this.allGamesResultsService = allGamesResultsService;
     }
 
-    @PostMapping
+    @PostMapping("/user")
     public ResponseEntity<GameResult> playGame() {
         GameResult gameResult = gameService.play();
         gameSession.addResult(gameResult);
+        allGamesResultsService.add(gameResult);
         return ResponseEntity.ok(gameResult);
     }
 
-    @GetMapping
+    @GetMapping("/user")
     public ResponseEntity<AllGamesResults> allGamesResultsPerUser() {
-        List<GameResult> gameResults = gameSession.getGameResults();
+        return getAllGamesResults(gameSession.getGameResults());
+    }
+
+    @DeleteMapping("/user")
+    public void reset() {
+        gameSession.getGameResults().clear();
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<AllGamesResults> totalGamesResults() {
+        return getAllGamesResults(allGamesResultsService.getAllGamesResults());
+    }
+
+    private ResponseEntity<AllGamesResults> getAllGamesResults(List<GameResult> gameResults) {
         if (CollectionUtils.isEmpty(gameResults)) {
             return ResponseEntity.noContent().build();
         }
@@ -43,10 +60,5 @@ public class GameController {
         long rockPlayerWins = gameService.getRockPlayerWins(gameResults);
         long draws = gameResults.size() - randomPlayerWins - rockPlayerWins;
         return ResponseEntity.ok(AllGamesResults.builder().gameResults(gameResults).randomPlayerWins(randomPlayerWins).rockPlayerWins(rockPlayerWins).draws(draws).build());
-    }
-
-    @DeleteMapping
-    public void reset() {
-        gameSession.getGameResults().clear();
     }
 }

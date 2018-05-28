@@ -4,6 +4,7 @@ import com.lottoland.game.model.AllGamesResults;
 import com.lottoland.game.model.GameResult;
 import com.lottoland.game.model.Shape;
 import com.lottoland.game.model.Winner;
+import com.lottoland.game.service.AllGamesResultsService;
 import com.lottoland.game.service.GameService;
 import com.lottoland.game.service.GameSession;
 import org.junit.Before;
@@ -30,11 +31,14 @@ public class GameControllerTest {
     @Mock
     private GameSession gameSession;
 
+    @Mock
+    private AllGamesResultsService allGamesResults;
+
     private GameController gameController;
 
     @Before
     public void setUp() throws Exception {
-        gameController = new GameController(gameService, gameSession);
+        gameController = new GameController(gameService, gameSession, allGamesResults);
     }
 
     @Test

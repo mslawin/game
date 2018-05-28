@@ -37,7 +37,7 @@ public class GameControllerSessionTest {
         MockHttpSession session = new MockHttpSession();
 
         // when
-        mockMvc.perform(post("/user").session(session));
+        mockMvc.perform(post("/game/user").session(session));
 
         // then
         GameSession gameSession = (GameSession) session.getAttribute("scopedTarget.gameSession");
@@ -54,7 +54,7 @@ public class GameControllerSessionTest {
         session.setAttribute("scopedTarget.gameSession", gameSession);
 
         // when
-        mockMvc.perform(delete("/user").session(session));
+        mockMvc.perform(delete("/game/user").session(session));
 
         // then
         gameSession = (GameSession) session.getAttribute("scopedTarget.gameSession");
